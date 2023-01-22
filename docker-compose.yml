@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  almacen-app:
+    container_name: almacen-app
+    # command to run develop mode
+    command: npm run serve
+    # command to run in production  mode
+    #command: serve -s build
+    restart: always
+    build: .
+    ports:
+      - "3000:8080"
+    volumes:
+      # in linux
+      #- "./:/app"
+      #- "./node_modules/:/app/node_modules/"
+      # in windows
+      - "/app"
+      - "/app/node_modules"
+networks:
+  default:
+    name: nat
+    external: true
+    
