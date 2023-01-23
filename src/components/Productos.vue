@@ -26,8 +26,7 @@
   
 
  <div style="width: 100%; display: table;">
-        <div style="display: table-row; height: 100px;">
-            <div>
+        <div>
                 <div style="padding:10px" v-for="producto,index in listItems.productos" :key="producto.id">
                   <div class="card card-container" >
                     <div class="container">
@@ -51,7 +50,6 @@
                     </v-btn>
                   </div>
           </div>
-        </div>
       </div>
     </div>
     </div>
