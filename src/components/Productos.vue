@@ -126,9 +126,7 @@ export default {
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
       async verDetalles(productoId) {
-         fetch('http://localhost:3000/productos/' + productoId, {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.producto = response.producto})
+        this.$router.push('/detallesProducto/' + productoId);
     },
     async remove(productoId,index) {
          fetch('http://localhost:3000/productos/' + productoId, {

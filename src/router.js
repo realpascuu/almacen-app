@@ -3,6 +3,7 @@ import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 // lazy-loaded
 const Productos = () => import("./components/Productos.vue")
+const DetallesProducto = () => import("./components/DetallesProducto.vue")
 
 const routes = [
   {
@@ -23,6 +24,12 @@ const routes = [
     name: "productos",
     // lazy-loaded
     component: Productos,
+  },
+  {
+    path: "/detallesProducto/:id",
+    name: "detallesProducto",
+    // lazy-loaded
+    component: DetallesProducto,
   }
 ];
 
