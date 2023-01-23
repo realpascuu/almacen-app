@@ -7,6 +7,8 @@ const DetallesProducto = () => import("./components/DetallesProducto.vue")
 const CrearProducto = () => import("./components/CrearProducto.vue")
 const Pedidos = () => import("./components/Pedidos.vue")
 const DetallesPedido = () => import("./components/DetallesPedido.vue")
+const Facturas = () => import("./components/Facturas.vue")
+const DetallesFactura = () => import("./components/DetallesFactura.vue")
 
 const routes = [
   {
@@ -51,6 +53,18 @@ const routes = [
     name: "detallesPedido",
     // lazy-loaded
     component: DetallesPedido,
+  },
+  {
+    path: "/facturas",
+    name: "facturas",
+    // lazy-loaded
+    component: Facturas,
+  },
+  {
+    path: "/detallesFactura/:id",
+    name: "detallesFactura",
+    // lazy-loaded
+    component: DetallesFactura,
   },
 ];
 

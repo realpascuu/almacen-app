@@ -12,6 +12,9 @@
                      <br>
                      <span class="titulos"> Fecha de pedido: </span>
                      <span style="font-size:18px">{{pedido.name}} </span>
+                     <br>
+                     <span class="titulos"> Fecha de factura: </span>
+                     <span style="font-size:18px">{{pedido.name}} </span>
                 </div>
                 <div class="column-mitad" align="right">
                     <span class="titulos"> Operación: </span>
@@ -54,12 +57,8 @@
           </div>
 
           <div class="form-group" align="center" style="margin-top:10px">
-                <v-btn rounded x-small @click="generarFactura" color="primary">      
-                      <span v-show="loading"  class="spinner-border spinner-border-sm"  ></span>
-                    <span>Generar Factura</span>
-                </v-btn>
                 <br>
-                <v-btn rounded x-small @click="volver" color="error" style="margin-top:10px">      
+                <v-btn rounded x-small @click="volver">      
                       <span v-show="loading"  class="spinner-border spinner-border-sm"  ></span>
                     <span>Volver</span>
                 </v-btn>
@@ -95,14 +94,8 @@ export default {
           }).then(response => response.json()).then(response=> {this.pedido = response.producto})
     },
      async volver(){
-        this.$router.push('/pedidos');
-    },
-     async generarFactura(pedidoId){
-        fetch('http://localhost:3000/pedidos/' + pedidoId, {
-              method: 'POST',
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.pedido = response.producto})
-    },
+        this.$router.push('/facturas');
+    }
   },
   setup() {
     const store = useAuthStore()

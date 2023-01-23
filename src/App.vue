@@ -11,6 +11,9 @@
         <li class="nav-item">
           <router-link v-if="currentUser" to="/pedidos" class="nav-link">PEDIDOS</router-link>
         </li>
+        <li class="nav-item">
+          <router-link v-if="currentUser" to="/facturas" class="nav-link">FACTURAS</router-link>
+        </li>
       </div>
 
       <div v-if="!currentUser" class="navbar-nav ml-auto">

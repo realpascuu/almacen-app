@@ -13,6 +13,9 @@
                       <br> 
                       <span style="font-size:18px;font-weight:bold"> Fecha de pedido: </span>
                       <span style="font-size:18px">{{producto.name}} </span>
+                      <br> 
+                      <span style="font-size:18px;font-weight:bold"> Fecha de Factura: </span>
+                      <span style="font-size:18px">{{producto.name}} </span>
                       <br>
                       <span style="font-size:18px;font-weight:bold">Importe Total: </span>
                       <span style="font-size:18px"> {{producto.precio}} € </span>
@@ -24,14 +27,6 @@
                           class="spinner-border spinner-border-sm"
                         ></span>
                         <span>Ver detalles</span>
-                      </v-btn>
-
-                     <v-btn rounded x-small @click="verDetalles(producto.id)" style="margin-left:10px" color="primary">      
-                        <span
-                          v-show="loading"
-                          class="spinner-border spinner-border-sm"
-                        ></span>
-                        <span>Generar Factura</span>
                       </v-btn>
                   </div>
           </div>
@@ -67,7 +62,7 @@
 import { useAuthStore } from '../stores/authStore.js'
 
 export default {
-  name: "PedidosComponent",
+  name: "FacturasComponent",
 
   data () {
     return {
@@ -89,8 +84,8 @@ export default {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
-      async verDetalles(pedidoId) {
-        this.$router.push('/detallesPedido/' + pedidoId);
+      async verDetalles(facturaId) {
+        this.$router.push('/detallesFactura/' + facturaId);
     },
     async remove(pedidoId,index) {
          fetch('http://localhost:3000/productos/' + pedidoId, {
