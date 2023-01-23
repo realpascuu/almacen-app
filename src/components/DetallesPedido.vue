@@ -95,7 +95,7 @@ export default {
           }).then(response => response.json()).then(response=> {this.pedido = response.producto})
     },
      async volver(){
-        this.$router.push('/productos');
+        this.$router.push('/pedidos');
     },
      async generarFactura(pedidoId){
         fetch('http://localhost:3000/pedidos/' + pedidoId, {
