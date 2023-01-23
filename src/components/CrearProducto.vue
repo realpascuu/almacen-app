@@ -1,0 +1,166 @@
+<template>
+<div id="app">
+  <div class="col-md-12">
+    <div class="card card-container">
+      <Form ref="form" @submit="newProducto" :validation-schema="schema">
+          <div style="text-align:center">
+              <h3>Creando Producto </h3>
+           </div>
+          <div class="form-group" @change="cambiaSuccess">
+            <label for="name">Nombre</label>
+            <Field v-model="name" name="name" type="text" class="form-control" />
+            <ErrorMessage name="name" class="error-feedback" />
+          </div>
+           <div class="form-group">
+            <label for="precio">Precio</label>
+            <Field type="number" v-model="precio" name="precio" class="form-control"/>
+            <ErrorMessage name="precio" class="error-feedback" />
+          </div>
+          <div class="form-group">
+            <label for="desc">Descripcion</label>
+            <Field v-model="desc" name="desc" type="text" class="form-control" />
+            <ErrorMessage name="desc" class="error-feedback" />
+          </div>
+
+          <div class="form-group">
+            <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
+
+              <v-btn elevation="6" rounded type="submit" color="primary">      
+                <span
+                  v-show="loading"
+                  class="spinner-border spinner-border-sm"
+                ></span>
+                <span>Crear</span>
+              </v-btn>
+              <v-btn style="margin-left:20px" color="error" rounded x-small @click="volver">      
+                  <span v-show="loading"  class="spinner-border spinner-border-sm" ></span>
+                <span>Volver</span>
+            </v-btn>
+
+           </div>
+          </div>
+      </Form>
+      <br>
+    </div>
+  </div>
+
+</div>
+
+  
+</template>
+
+<script>
+import {Form,Field, ErrorMessage } from "vee-validate";
+import * as yup from "yup";
+
+import { useAuthStore } from '../stores/authStore.js'
+
+export default {
+  name: 'CrearProductoComponent',
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
+  data () {
+    const schema = yup.object().shape({
+      name: yup.string().required("Campo nombre requerido!"),
+      desc: yup.string().required("Campo descripción requerido!"),
+      precio: yup.string().required("Campo precio requerido!"),
+    });
+
+    return {
+      producto: [],
+      successful: false,
+      page:"",
+      name:"",
+      desc:"",
+      precio:"",
+      id:"",
+      schema,
+      message: "",
+    }
+  },
+  methods:{
+    async newProducto() {
+     this.successful = false;
+     this.message = "";
+      var newProducto = {
+        nombre: this.name,
+        precio: this.precio,
+        descripcion: this.desc
+      }
+      console.log(newProducto)
+    try{
+     await fetch('http://localhost:3000/productos', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + this.currentUser.token},
+              body: JSON.stringify(newProducto)
+          }).then(response => response.json()).then(response=> {this.message = response.mensaje})
+          this.$swal(this.message)
+          this.$refs.form.resetForm();
+      }
+      catch (error) {
+          this.loading = false;
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          this.$swal(this.message)
+
+      }
+    },
+    async volver(){
+        this.$router.push('/productos');
+    },
+  },
+  setup() {
+    const store = useAuthStore()
+    return {store}
+  },
+  computed: {
+    currentUser() {
+      return this.store.user;
+    }
+  },
+ 
+  mounted() {
+    if (!this.currentUser) {
+          this.$router.push('/login');
+        }
+ }
+      
+};
+</script>
+
+<style scoped>
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+.card-container.card {
+  max-width: 450px !important;
+  padding: 40px 40px;
+}
+
+.card {
+  background-color: #f7f7f7;
+  padding: 20px 25px 30px;
+  margin: 0 auto 25px;
+  margin-top: 50px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.error-feedback {
+  color: red;
+}
+</style>

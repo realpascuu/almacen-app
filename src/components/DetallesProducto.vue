@@ -41,14 +41,6 @@ export default {
  
     return {
       producto: [],
-      successful: false,
-      page:"",
-      name:"",
-      desc:"",
-      precio:"",
-      id:"",
-      message: "",
-
     }
   },
   methods:{
@@ -63,7 +55,7 @@ export default {
     },
      async volver(){
         this.$router.push('/productos');
-  },
+    },
   },
   setup() {
     const store = useAuthStore()

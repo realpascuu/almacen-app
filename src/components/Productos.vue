@@ -1,12 +1,5 @@
 <template>
 <div id="app">
-  <v-snackbar
-        v-model="snackbar"
-      >
-        {{ message }}
-  </v-snackbar>
-
-
   <div style="padding:10px;" >
         <div class="form-group">
           <input style=" width:300px;height:30px" v-model="name" name="name" type="text"
@@ -20,10 +13,17 @@
               ></span>
               <span >Buscar</span>
             </v-btn>
-          </div>
-  </div>
 
-  
+              <v-btn style="float:right" elevation="6" rounded @click="crearProducto" >      
+              <span
+                v-show="loading"
+                class="spinner-border spinner-border-sm"
+              ></span>
+              <span >Crear Producto</span>
+            </v-btn>
+          </div>
+       
+  </div>
 
  <div style="width: 100%; display: table;">
         <div>
@@ -78,7 +78,6 @@
 </template>
 
 <script>
-import * as yup from "yup";
 
 import { useAuthStore } from '../stores/authStore.js'
 
@@ -86,22 +85,14 @@ export default {
   name: "ProductosComponent",
 
   data () {
-    const schema = yup.object().shape({
-      newname: yup.string().required("Campo nombre requerido!"),
-      newdesc: yup.string().required("Campo descripción requerido!"),
-      newprecio: yup.string().required("Campo precio requerido!"),
-    });
     return {
       listItems: [],
       page:"",
       name:"",
       producto: [],
-      schema,
       newname:"",
       newdesc:"",
       newprecio:"",
-      message:"",
-      snackbar:false,
     }
   },
   methods:{
@@ -136,8 +127,8 @@ export default {
          this.listItems.productos.splice(index, 1); 
          this.$swal('Producto eliminado correctamente')
     },
-    ocultar(){
-      this.producto = ""
+    async crearProducto(){
+         this.$router.push('/crearProducto');
     },
     async newProducto(){
       var newProducto = {

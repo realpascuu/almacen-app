@@ -4,6 +4,7 @@ import Register from "./components/Register.vue";
 // lazy-loaded
 const Productos = () => import("./components/Productos.vue")
 const DetallesProducto = () => import("./components/DetallesProducto.vue")
+const CrearProducto = () => import("./components/CrearProducto.vue")
 
 const routes = [
   {
@@ -30,6 +31,12 @@ const routes = [
     name: "detallesProducto",
     // lazy-loaded
     component: DetallesProducto,
+  },
+  {
+    path: "/crearProducto",
+    name: "crearProducto",
+    // lazy-loaded
+    component: CrearProducto,
   }
 ];
 
