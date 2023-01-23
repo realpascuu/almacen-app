@@ -5,6 +5,8 @@ import Register from "./components/Register.vue";
 const Productos = () => import("./components/Productos.vue")
 const DetallesProducto = () => import("./components/DetallesProducto.vue")
 const CrearProducto = () => import("./components/CrearProducto.vue")
+const Pedidos = () => import("./components/Pedidos.vue")
+const DetallesPedido = () => import("./components/DetallesPedido.vue")
 
 const routes = [
   {
@@ -37,7 +39,19 @@ const routes = [
     name: "crearProducto",
     // lazy-loaded
     component: CrearProducto,
-  }
+  },
+  {
+    path: "/pedidos",
+    name: "pedidos",
+    // lazy-loaded
+    component: Pedidos,
+  },
+  {
+    path: "/detallesPedido/:id",
+    name: "detallesPedido",
+    // lazy-loaded
+    component: DetallesPedido,
+  },
 ];
 
 const router = createRouter({

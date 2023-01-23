@@ -8,6 +8,9 @@
         <li class="nav-item">
           <router-link v-if="currentUser" to="/productos" class="nav-link">PRODUCTOS</router-link>
         </li>
+        <li class="nav-item">
+          <router-link v-if="currentUser" to="/pedidos" class="nav-link">PEDIDOS</router-link>
+        </li>
       </div>
 
       <div v-if="!currentUser" class="navbar-nav ml-auto">

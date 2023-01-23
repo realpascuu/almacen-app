@@ -1,39 +1,17 @@
 <template>
 <div id="app">
-  <div style="padding:10px;" >
-        <div class="form-group">
-          <input style=" width:300px;height:30px" v-model="name" name="name" type="text"
-           class="form-control" @keyup.enter="buscar"/>
-        </div>
-        <div style="margin-top:10px">
-          <v-btn elevation="6" rounded @click="buscar(name)" >      
-              <span
-                v-show="loading"
-                class="spinner-border spinner-border-sm"
-              ></span>
-              <span >Buscar</span>
-            </v-btn>
-
-              <v-btn style="float:right" elevation="6" rounded @click="crearProducto" >      
-              <span
-                v-show="loading"
-                class="spinner-border spinner-border-sm"
-              ></span>
-              <span >Crear Producto</span>
-            </v-btn>
-          </div>
-       
-  </div>
-
- <div style="width: 100%; display: table;">
+ <div style="padding-top:10px;width: 100%; display: table;">
         <div>
                 <div style="padding:10px" v-for="producto,index in listItems.productos" :key="producto.id">
                   <div class="card card-container" >
                     <div class="container">
-                      <span style="font-size:18px;font-weight:bold">Producto: </span>
+                      <span style="font-size:18px;font-weight:bold"> Id: </span>
                       <span style="font-size:18px">{{producto.name}} </span>
                       <br>
-                      <span style="font-size:18px;font-weight:bold">Precio: </span>
+                      <span style="font-size:18px;font-weight:bold"> Operación: </span>
+                      <span style="font-size:18px">{{producto.name}} </span>
+                      <br>
+                      <span style="font-size:18px;font-weight:bold">Importe Total: </span>
                       <span style="font-size:18px"> {{producto.precio}} € </span>
                       <br>
                     <div align="right">
@@ -82,7 +60,7 @@
 import { useAuthStore } from '../stores/authStore.js'
 
 export default {
-  name: "ProductosComponent",
+  name: "PedidosComponent",
 
   data () {
     return {
@@ -99,34 +77,23 @@ export default {
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
     async getPage(page) {
-      //console.log(page)
         fetch('http://' + page
         , {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
-    async buscar() {
-      //console.log(this.name)
-        fetch("http://localhost:3000/productos?" + new URLSearchParams({
-            nombre: this.name,
-           }) , {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.listItems = response})
+      async verDetalles(pedidoId) {
+        this.$router.push('/detallesPedido/' + pedidoId);
     },
-      async verDetalles(productoId) {
-        this.$router.push('/detallesProducto/' + productoId);
-    },
-    async remove(productoId,index) {
-         fetch('http://localhost:3000/productos/' + productoId, {
+    async remove(pedidoId,index) {
+         fetch('http://localhost:3000/productos/' + pedidoId, {
               method: 'DELETE',
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           })
          this.listItems.productos.splice(index, 1); 
          this.$swal('Producto eliminado correctamente')
     },
-    async crearProducto(){
-         this.$router.push('/crearProducto');
-    },
+    
   },
   setup() {
     const store = useAuthStore()
