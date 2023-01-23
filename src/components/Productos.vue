@@ -136,7 +136,7 @@ export default {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           })
          this.listItems.productos.splice(index, 1); 
-
+         this.$swal('Producto eliminado correctamente')
     },
     ocultar(){
       this.producto = ""

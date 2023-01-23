@@ -11,6 +11,9 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 const vuetify = createVuetify({
   components,
   directives,
@@ -20,5 +23,6 @@ createApp(App)
   .use(router)
   .use(createPinia())
   .use(vuetify)
+  .use(VueSweetalert2)
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");
