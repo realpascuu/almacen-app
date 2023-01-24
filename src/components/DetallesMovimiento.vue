@@ -3,21 +3,21 @@
   <div class="col-md-12">
     <div class="card card-container">
           <div style="text-align:center">
-              <h3>Detalles de la Factura </h3>
+              <h3>Detalles del Movimiento </h3>
            </div>
            <div class="row">
-                <div class="column-mitad">
-                     <span class="titulos"> Id de factura: </span>
+                <div class="column">
+                     <span class="titulos"> Id del movimiento: </span>
                      <span style="font-size:18px">{{pedido.id}} </span>
                      <br>
-                     <span class="titulos"> Fecha de pedido: </span>
-                     <span style="font-size:18px">{{pedido.name}} </span>
-                     <br>
-                     <span class="titulos"> Fecha de factura: </span>
+                     <span class="titulos"> Almacén de entrada: </span>
                      <span style="font-size:18px">{{pedido.name}} </span>
                 </div>
-                <div class="column-mitad" align="right">
-                    <span class="titulos"> Operación: </span>
+                <div class="column" align="right">
+                    <span class="titulos"> Almacén de entrada: </span>
+                    <span style="font-size:18px">{{pedido.name}} </span>
+                    <br>
+                    <span class="titulos"> Almacén de salida: </span>
                     <span style="font-size:18px">{{pedido.name}} </span>
                 </div>
              </div>
@@ -30,9 +30,6 @@
                 <div class="column" align="center">
                     <span class="titulos"> Unidades: </span>
                 </div>
-                <div class="column" align="center">
-                    <span class="titulos"> Precio: </span>
-                </div>
              </div>
            <div class="interior-card" style="padding:10px" v-for="producto in pedido" :key="producto.id">
               <div class="row">
@@ -42,20 +39,12 @@
                 <div class="column" align="center">
                    <span style="font-size:18px">{{producto}} </span>
                 </div>
-                <div class="column" align="center">
-                   <span style="font-size:18px">{{producto}} </span>
-                </div>
               </div>
 
            </div>
-           <div align="center">
-             <span class="titulos">Precio Total: </span>
-             <span style="font-size:18px"> {{pedido.precio}} </span>
-          </div>
 
           <div class="form-group" align="center" style="margin-top:10px">
-                <br>
-                <v-btn rounded x-small @click="volver">      
+                <v-btn rounded x-small @click="volver" color="error" style="margin-top:10px">      
                       <span v-show="loading"  class="spinner-border spinner-border-sm"  ></span>
                     <span>Volver</span>
                 </v-btn>
@@ -74,7 +63,7 @@
 import { useAuthStore } from '../stores/authStore.js'
 
 export default {
-  name: 'DetallesPedidoComponent',
+  name: 'DetallesMovimientoComponent',
   data () {
  
     return {
@@ -91,8 +80,8 @@ export default {
           }).then(response => response.json()).then(response=> {this.pedido = response.producto})
     },
      async volver(){
-        this.$router.push('/facturas');
-    }
+        this.$router.push('/movimientos');
+    },
   },
   setup() {
     const store = useAuthStore()
@@ -165,14 +154,7 @@ label {
   font-weight:bold
 }
 
-/* Create three equal columns that floats next to each other */
 .column {
-  float: left;
-  width: 33.33%;
-  padding: 10px;
-}
-
-.column-mitad {
   float: left;
   width: 50%;
   padding: 10px;

@@ -16,9 +16,7 @@
                 <div class="column-mitad" align="right">
                     <span class="titulos"> Operación: </span>
                     <span style="font-size:18px">{{pedido.name}} </span>
-                    <br>
-                    <span class="titulos"> Almacén: </span>
-                    <span style="font-size:18px">{{pedido.name}} </span>
+
                 </div>
              </div>
 

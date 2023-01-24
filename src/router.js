@@ -10,6 +10,8 @@ const DetallesPedido = () => import("./components/DetallesPedido.vue")
 const Facturas = () => import("./components/Facturas.vue")
 const DetallesFactura = () => import("./components/DetallesFactura.vue")
 const Almacenes = () => import("./components/Almacenes.vue")
+const Movimientos = () => import("./components/Movimientos.vue")
+const DetallesMovimiento = () => import("./components/DetallesMovimiento.vue")
 
 const routes = [
   {
@@ -72,6 +74,18 @@ const routes = [
     name: "almacenes",
     // lazy-loaded
     component: Almacenes,
+  },
+  {
+    path: "/movimientos",
+    name: "movimientos",
+    // lazy-loaded
+    component: Movimientos,
+  },
+  {
+    path: "/detallesMovimiento/:id",
+    name: "detallesMovimiento",
+    // lazy-loaded
+    component: DetallesMovimiento,
   },
 ];
 
