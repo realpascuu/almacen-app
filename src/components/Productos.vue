@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <div style="padding:10px;" >
+  <div style="padding:10px;margin-top:10px" >
         <div class="form-group">
           <input style=" width:300px;height:30px" v-model="name" name="name" type="text"
            class="form-control" @keyup.enter="buscar"/>

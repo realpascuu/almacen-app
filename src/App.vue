@@ -8,6 +8,9 @@
           <li class="nav-item">
           <router-link v-if="currentUser" to="/almacenes" class="nav-link">ALMACENES</router-link>
         </li>
+      <li class="nav-item">
+          <router-link v-if="currentUser" to="/movimientos" class="nav-link">MOVIMIENTOS</router-link>
+        </li>
         <li class="nav-item">
           <router-link v-if="currentUser" to="/productos" class="nav-link">PRODUCTOS</router-link>
         </li>
@@ -17,9 +20,7 @@
         <li class="nav-item">
           <router-link v-if="currentUser" to="/facturas" class="nav-link">FACTURAS</router-link>
         </li>
-         <li class="nav-item">
-          <router-link v-if="currentUser" to="/movimientos" class="nav-link">MOVIMIENTOS</router-link>
-        </li>
+       
       </div>
 
       <div v-if="!currentUser" class="navbar-nav ml-auto">

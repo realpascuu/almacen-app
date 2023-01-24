@@ -1,7 +1,7 @@
 <template>
 <div id="app">
  <div style="width: 100%;padding:20px">
- <h4> Almacen: </h4>
+ <h4> Buscar movimientos: </h4>
       <div class="select">
         <select v-model="key" id="select" class="form-control" required  @change="buscar()">
         <option v-for="(almacen) in listItems.productos" 
