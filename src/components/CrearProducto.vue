@@ -8,7 +8,7 @@
               <h5>Todos los campos son obligatorios </h5>
 
            </div>
-          <div class="form-group" @change="cambiaSuccess">
+          <div class="form-group" >
             <label for="name">Nombre</label>
             <Field v-model="name" name="name" type="text" class="form-control" />
             <ErrorMessage name="name" class="error-feedback" />
@@ -27,7 +27,7 @@
           <div class="form-group">
             <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
 
-              <v-btn elevation="6" rounded type="submit" color="primary" @click="volver">      
+              <v-btn elevation="6" rounded type="submit" color="primary">      
                 <span
                   v-show="loading"
                   class="spinner-border spinner-border-sm"
