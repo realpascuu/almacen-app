@@ -13,13 +13,23 @@
       
            <span class="titulos">Descripción: </span>
            <span style="font-size:18px"> {{producto.descripcion}} </span>
-       
+        
+           <span class="titulos" style="margin-top:20px"> *Agregar cantidad a almacenes: </span>
+           <Input v-model="cantidad" name="cantidad" type="number" style="width:200px" class="form-control" />
+
           <div class="form-group">
             <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
-         <v-btn rounded x-small @click="volver">      
-              <span v-show="loading"  class="spinner-border spinner-border-sm"  ></span>
-             <span>Volver</span>
-         </v-btn>
+            
+                <v-btn rounded x-small @click="comprar" color="primary">      
+                      <span v-show="loading"  class="spinner-border spinner-border-sm"  ></span>
+                    <span>Agregar Cantidad</span>
+                </v-btn>
+
+                <br>
+              <v-btn rounded x-small @click="volver" style="margin-top:10px">      
+                    <span v-show="loading"  class="spinner-border spinner-border-sm"  ></span>
+                  <span>Volver</span>
+              </v-btn>
            </div>
           </div>
       <br>
@@ -55,6 +65,14 @@ export default {
     },
      async volver(){
         this.$router.push('/productos');
+    },
+      async comprar(){
+        console.log(this.cantidad)
+        if(this.cantidad > 0){
+           this.$swal('¡La cantidad tiene que ser un número positivo!')
+        }
+        else
+        this.$swal('Cantidad agregada a los almacenes correctamente')
     },
   },
   setup() {

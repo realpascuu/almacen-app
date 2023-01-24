@@ -5,6 +5,8 @@
       <Form ref="form" @submit="newProducto" :validation-schema="schema">
           <div style="text-align:center">
               <h3>Creando Producto </h3>
+              <h5>Todos los campos son obligatorios </h5>
+
            </div>
           <div class="form-group" @change="cambiaSuccess">
             <label for="name">Nombre</label>
@@ -25,7 +27,7 @@
           <div class="form-group">
             <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
 
-              <v-btn elevation="6" rounded type="submit" color="primary">      
+              <v-btn elevation="6" rounded type="submit" color="primary" @click="volver">      
                 <span
                   v-show="loading"
                   class="spinner-border spinner-border-sm"

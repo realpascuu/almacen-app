@@ -5,6 +5,9 @@
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
         </li>
+          <li class="nav-item">
+          <router-link v-if="currentUser" to="/almacenes" class="nav-link">ALMACENES</router-link>
+        </li>
         <li class="nav-item">
           <router-link v-if="currentUser" to="/productos" class="nav-link">PRODUCTOS</router-link>
         </li>
