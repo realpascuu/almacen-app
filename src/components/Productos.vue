@@ -27,17 +27,17 @@
 
  <div style="width: 100%; display: table;">
         <div>
-                <div style="padding:10px" v-for="producto,index in listItems.productos" :key="producto.id">
+                <div style="padding:10px" v-for="producto,index in listItems.articulos" :key="producto.cod">
                   <div class="card card-container" >
                     <div class="container">
                       <span style="font-size:18px;font-weight:bold">Producto: </span>
-                      <span style="font-size:18px">{{producto.name}} </span>
+                      <span style="font-size:18px">{{producto.nombre}} </span>
                       <br>
                       <span style="font-size:18px;font-weight:bold">Precio: </span>
-                      <span style="font-size:18px"> {{producto.precio}} € </span>
+                      <span style="font-size:18px"> {{producto.pvp}} € </span>
                       <br>
                     <div align="right">
-                      <v-btn rounded x-small @click="verDetalles(producto.id)">      
+                      <v-btn rounded x-small @click="verDetalles(producto.cod)">      
                         <span
                           v-show="loading"
                           class="spinner-border spinner-border-sm"
@@ -45,7 +45,7 @@
                         <span>Ver detalles</span>
                       </v-btn>
 
-                      <v-btn :loading="loading" class="ma-1" color="error" plain  @click="remove(producto.id,index)" rounded >
+                      <v-btn :loading="loading" class="ma-1" color="error" plain  @click="remove(producto.cod,index)" rounded >
                       Delete
                     </v-btn>
                   </div>
@@ -94,7 +94,8 @@ export default {
   },
   methods:{
     async getData() {
-         fetch('http://localhost:3000/productos', {
+      //console.log("Pillando data")
+         fetch('https://localhost:5001/api/articulos', {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
