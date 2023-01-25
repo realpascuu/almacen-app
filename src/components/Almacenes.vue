@@ -75,6 +75,7 @@ export default {
   },
   methods:{
     async getData() {
+      //this.key=this.listItems.Almacenseleccionados o algo asi
          fetch('http://localhost:3000/productos', {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.listItems = response,this.key = this.listItems.productos[0].name})
