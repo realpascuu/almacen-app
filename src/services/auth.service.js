@@ -23,12 +23,14 @@ export class AuthService {
     localStorage.removeItem('user');
   }
 
-  register(user) {
-    return axios.post(API_URL + 'register', {
-      username: user.username,
-      email: user.email,
-      password: user.password,
-      address: user.address
+  async register(user) {
+    return await axios.post(API_URL + 'users', { ...user })
+    .then(() => {
+      
+      return true;
+    })
+    .catch(() => {
+      return false;
     });
   }
 
