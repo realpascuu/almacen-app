@@ -65,6 +65,7 @@ import {Form,Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: 'CrearProductoComponent',
@@ -98,7 +99,7 @@ export default {
       async getData() {
       //console.log(this.$route.params.id)
 
-         fetch('https://localhost:5001/api/articulos/categorias')
+         fetch(`${API_URL}articulos/categorias`)
          .then(response => response.json()).then(response=> {this.categorias = response;console.log(this.categorias)})
     },
 
@@ -116,7 +117,7 @@ export default {
           }
           console.log(newProducto)
         try{
-        await fetch('https://localhost:5001/api/articulos/crear', {
+        await fetch(`${API_URL}articulos/crear`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json'},
                   body: JSON.stringify(newProducto)

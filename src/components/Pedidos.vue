@@ -65,6 +65,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: "PedidosComponent",
@@ -79,7 +80,7 @@ export default {
   },
   methods:{
     async getData() {
-         fetch('http://localhost:3000/productos', {
+         fetch(`${API_URL}pedidos`, {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
@@ -93,7 +94,7 @@ export default {
         this.$router.push('/detallesPedido/' + pedidoId);
     },
     async remove(pedidoId,index) {
-         fetch('http://localhost:3000/productos/' + pedidoId, {
+         fetch(`${API_URL}productos/` + pedidoId, {
               method: 'DELETE',
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           })
