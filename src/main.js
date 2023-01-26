@@ -14,6 +14,8 @@ import * as directives from 'vuetify/directives'
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
+export const API_URL = 'http://localhost:5000/api/';
+
 const vuetify = createVuetify({
   components,
   directives,

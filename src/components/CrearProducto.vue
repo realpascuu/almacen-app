@@ -23,7 +23,15 @@
             <Field v-model="desc" name="desc" type="text" class="form-control" />
             <ErrorMessage name="desc" class="error-feedback" />
           </div>
-
+          <div class="select">
+                <label for="cat">Categoria</label>
+                <select v-model="key" id="select" class="form-control" required >
+                <option v-for="(almacen) in categorias.results" 
+                :value="almacen.categoria" :key="almacen.categoria">
+                {{almacen.categoria}}
+                </option>
+                </select>
+          </div>
           <div class="form-group">
             <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
 
@@ -34,6 +42,7 @@
                 ></span>
                 <span>Crear</span>
               </v-btn>
+
               <v-btn style="margin-left:20px" color="error" rounded x-small @click="volver">      
                   <span v-show="loading"  class="spinner-border spinner-border-sm" ></span>
                 <span>Volver</span>
@@ -56,6 +65,7 @@ import {Form,Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: 'CrearProductoComponent',
@@ -81,39 +91,55 @@ export default {
       id:"",
       schema,
       message: "",
+      categorias: [],
+      activo: true
     }
   },
   methods:{
-    async newProducto() {
-     this.successful = false;
-     this.message = "";
-      var newProducto = {
-        nombre: this.name,
-        precio: this.precio,
-        descripcion: this.desc
-      }
-      console.log(newProducto)
-    try{
-     await fetch('http://localhost:3000/productos', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.currentUser.token},
-              body: JSON.stringify(newProducto)
-          }).then(response => response.json()).then(response=> {this.message = response.mensaje})
-          this.$swal(this.message)
-          this.$refs.form.resetForm();
-      }
-      catch (error) {
-          this.loading = false;
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          this.$swal(this.message)
+      async getData() {
+      //console.log(this.$route.params.id)
 
-      }
+         fetch(`${API_URL}articulos/categorias`)
+         .then(response => response.json()).then(response=> {this.categorias = response;console.log(this.categorias)})
+    },
+
+    async newProducto() {
+      if(this.activo){
+        this.successful = false;
+        this.message = "";
+        this.activo = false;
+          var newProducto = {
+            nombre: this.name,
+            pvp: this.precio,
+            especificaciones: this.desc,
+            categoria: this.key,
+            imagen: ""
+          }
+          console.log(newProducto)
+        try{
+        await fetch(`${API_URL}articulos/crear`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json'},
+                  body: JSON.stringify(newProducto)
+              })
+              this.$swal("Producto creado correctamente")
+              this.$refs.form.resetForm();
+              //console.log(this.error)
+          }
+          catch (error) {
+              this.loading = false;
+              this.message =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+              this.$swal("Error al crear, problemas con la base de datos")
+          }
+          finally{
+            this.activo = true;
+          }
+     }
     },
     async volver(){
         this.$router.push('/productos');
@@ -133,6 +159,7 @@ export default {
     if (!this.currentUser) {
           this.$router.push('/login');
         }
+    this.getData()
  }
       
 };
@@ -164,5 +191,10 @@ label {
 
 .error-feedback {
   color: red;
+}
+
+.select {
+  margin-top: 10px;
+  max-width: 150px !important;
 }
 </style>

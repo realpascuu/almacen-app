@@ -64,6 +64,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: "MovimientosComponent",
@@ -78,7 +79,7 @@ export default {
   },
   methods:{
     async getData() {
-         fetch('http://localhost:3000/productos', {
+         fetch(`${API_URL}movimientos`, {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },

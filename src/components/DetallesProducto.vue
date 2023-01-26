@@ -6,13 +6,13 @@
               <h3>Detalles del Producto </h3>
            </div>
            <span class="titulos">Producto: </span>
-           <span style="font-size:18px">{{producto.name}} </span>
+           <span style="font-size:18px">{{nombre}} </span>
 
            <span class="titulos">Precio: </span>
-           <span style="font-size:18px"> {{producto.precio}} € </span>
+           <span style="font-size:18px"> {{pvp}} € </span>
       
            <span class="titulos">Descripción: </span>
-           <span style="font-size:18px"> {{producto.descripcion}} </span>
+           <span style="font-size:18px"> {{especificaciones}} </span>
            <span class="titulos" style="margin-top:20px"> *Agregar cantidad a almacenes: </span>
            <input type="Number" v-model.number="cantidad" class="form-control" style="width:150px"/>
           <div class="form-group">
@@ -41,13 +41,18 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: 'DetallesProductoComponent',
   data () {
  
     return {
-      producto: [],
+      cod: "",
+      nombre: "",
+      especificaciones: "",
+      pvp:"",
+      categoria:"",
       cantidad:"0"
     }
   },
@@ -56,10 +61,8 @@ export default {
     async getData() {
       //console.log(this.$route.params.id)
 
-         fetch('http://localhost:3000/productos/' + this.$route.params.id, {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.producto = response.producto;this.name = this.producto.name;
-          this.desc=this.producto.descripcion;this.precio=this.producto.precio;this.id=this.producto.id})
+         fetch(`${API_URL}api/articulos/` + this.$route.params.id).then(response => response.json()).then(response=> {this.nombre = response.nombre;
+          this.especificaciones=response.especificaciones;this.pvp=response.pvp;this.cod=response.cod})
     },
      async volver(){
         this.$router.push('/productos');

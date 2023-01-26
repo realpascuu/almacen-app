@@ -61,6 +61,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: "AlmacenesComponent",
@@ -78,7 +79,7 @@ export default {
   methods:{
     async getData() {
       //this.key=this.listItems.Almacenseleccionados o algo asi
-       await  fetch('http://localhost:5000/api/almacenes/page'
+       await  fetch(`${API_URL}almacenes/page`
          //, { headers: {Authorization: 'Bearer ' + this.currentUser.token}}
          ).then(response => response.json()).then(
           response=> {this.almacenes = response, this.key = this.almacenes.results[0].nombre
@@ -97,7 +98,7 @@ export default {
     },
     async buscar() {
         //console.log(this.key);
-        fetch("http://localhost:5000/api/almacenes/"+this.key+"?"+ new URLSearchParams({
+        fetch(`${API_URL}almacenes/`+this.key+`?` + new URLSearchParams({
             nombre: this.key,
            }) 
            //, {headers: {Authorization: 'Bearer ' + this.currentUser.token}}

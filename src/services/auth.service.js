@@ -1,19 +1,15 @@
 import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/';
+import API_URL from '../main';
 
 class AuthService {
   login(user) {
     return axios
-      .post(API_URL + 'login', {
+      .post(API_URL + 'auth/login', {
         login: user.login,
         password: user.password
       })
       .then(response => {
-        if (response.data.token) {
           localStorage.setItem('user', JSON.stringify(response.data));
-        }
-
         return response.data;
       });
   }

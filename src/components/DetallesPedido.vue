@@ -74,6 +74,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: 'DetallesPedidoComponent',
@@ -88,7 +89,7 @@ export default {
     async getData() {
       //console.log(this.$route.params.id)
 
-         fetch('http://localhost:3000/productos/' + this.$route.params.id, {
+         fetch(`${API_URL}productos/` + this.$route.params.id, {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.pedido = response.producto})
     },
@@ -96,7 +97,7 @@ export default {
         this.$router.push('/pedidos');
     },
      async generarFactura(pedidoId){
-        fetch('http://localhost:3000/pedidos/' + pedidoId, {
+        fetch(`${API_URL}pedidos/` + pedidoId, {
               method: 'POST',
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.pedido = response.producto})
