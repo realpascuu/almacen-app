@@ -5,21 +5,21 @@
      <h4> Almacen: </h4>
       <div class="select">
         <select v-model="key" id="select" class="form-control" required  @change="buscar()">
-        <option v-for="(almacen) in listItems.productos" 
-        :value="almacen.name" :key="almacen.name">
-         {{almacen.name}}
+        <option v-for="(almacen) in almacenes.results" 
+        :value="almacen.nombre" :key="almacen.nombre">
+         {{almacen.nombre}}
         </option>
         </select>
       </div>
         <div>
-                <div style="padding:10px" v-for="producto in listItems.productos" :key="producto.id">
+                <div style="padding:10px" v-for="producto in listItems.results" :key="producto.id">
                   <div class="card card-container" >
                     <div class="container">
-                      <span style="font-size:18px;font-weight:bold">Producto: </span>
-                      <span style="font-size:18px">{{producto.name}} </span>
+                      <span style="font-size:18px;font-weight:bold">Articulo: </span>
+                      <span style="font-size:18px">{{producto.articulo}} </span>
                       <br>
                       <span style="font-size:18px;font-weight:bold">Cantidad: </span>
-                      <span style="font-size:18px"> {{producto.precio}} </span>
+                      <span style="font-size:18px"> {{producto.cantidad}} </span>
                       <br>
                     <div align="right">
                       <v-btn rounded x-small @click="verDetalles(producto.id)">      
@@ -68,35 +68,43 @@ export default {
 
   data () {
     return {
+      almacenes: [],
       listItems: [],
       page:"",
       name:"",
       producto: [],
+      almacen: "",
     }
   },
   methods:{
     async getData() {
       //this.key=this.listItems.Almacenseleccionados o algo asi
-         fetch(`${API_URL}productos`, {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.listItems = response,this.key = this.listItems.productos[0].name})
+       await  fetch(`${API_URL}almacenes/page`
+         //, { headers: {Authorization: 'Bearer ' + this.currentUser.token}}
+         ).then(response => response.json()).then(
+          response=> {this.almacenes = response, this.key = this.almacenes.results[0].nombre
+          this.buscar()
+          })
+        
+         
     },
+    
     async getPage(page) {
       //console.log(page)
         fetch('http://' + page
-        , {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.listItems = response,this.key = this.listItems.productos[0].name})
+        //, {headers: {Authorization: 'Bearer ' + this.currentUser.token}}
+        ).then(response => response.json()).then(response=> {this.listItems = response})
+        
     },
     async buscar() {
         //console.log(this.key);
-        fetch(`${API_URL}productos?` + new URLSearchParams({
+        fetch(`${API_URL}almacenes/`+this.key+`?` + new URLSearchParams({
             nombre: this.key,
-           }) , {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.listItems = response})
+           }) 
+           //, {headers: {Authorization: 'Bearer ' + this.currentUser.token}}
+          ).then(response => response.json()).then(response=> {this.listItems = response})
     },
-      async verDetalles(productoId) {
+    async verDetalles(productoId) {
         this.$router.push('/detallesProducto/' + productoId);
     }
   },
@@ -108,6 +116,7 @@ export default {
     currentUser() {
       return this.store.user;
     }
+  
   },
  
   mounted() {
@@ -120,6 +129,9 @@ export default {
       }
       */
      this.getData()
+     
+   
+     
  }
       
 };
