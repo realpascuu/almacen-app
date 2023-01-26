@@ -56,7 +56,7 @@ export default {
     async getData() {
       //console.log(this.$route.params.id)
 
-         fetch('http://localhost:3000/productos/' + this.$route.params.id, {
+         fetch('http://localhost:5001/api/articulos/' + this.$route.params.id, {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.producto = response.producto;this.name = this.producto.name;
           this.desc=this.producto.descripcion;this.precio=this.producto.precio;this.id=this.producto.id})

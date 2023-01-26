@@ -27,7 +27,7 @@
 
  <div style="width: 100%; display: table;">
         <div>
-                <div style="padding:10px" v-for="producto,index in listItems.articulos" :key="producto.cod">
+                <div style="padding:10px" v-for="producto,index in listItems.results" :key="producto.cod">
                   <div class="card card-container" >
                     <div class="container">
                       <span style="font-size:18px;font-weight:bold">Producto: </span>
@@ -56,7 +56,7 @@
   </div>
 
   <div style="padding:20px">
-   <v-btn elevation="6" rounded style="margin-right:10px" v-if="listItems.previousPage" @click="getPage(listItems.previousPage)">      
+   <v-btn elevation="6" rounded style="margin-right:10px" v-if="listItems.previousPage != -1" @click="getPage(listItems.previousPage)">      
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
@@ -64,7 +64,7 @@
             <span>Página anterior</span>
           </v-btn>
            
-           <v-btn elevation="6" rounded v-if="listItems.nextPage" @click="getPage(listItems.nextPage)" >      
+           <v-btn elevation="6" rounded v-if="listItems.nextPage != -1" @click="getPage(listItems.nextPage)" >      
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
@@ -95,16 +95,14 @@ export default {
   methods:{
     async getData() {
       //console.log("Pillando data")
-         fetch('https://localhost:5001/api/articulos', {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
+         fetch('https://localhost:5001/api/articulos/page', {
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
     async getPage(page) {
       //console.log(page)
-        fetch('http://' + page
-        , {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.listItems = response})
+        fetch('https://localhost:5001/api/articulos/page?' + new URLSearchParams({
+            page: page,
+           })).then(response => response.json()).then(response=> {this.listItems = response})
     },
     async buscar() {
       //console.log(this.name)
