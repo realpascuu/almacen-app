@@ -42,6 +42,7 @@
                 ></span>
                 <span>Crear</span>
               </v-btn>
+
               <v-btn style="margin-left:20px" color="error" rounded x-small @click="volver">      
                   <span v-show="loading"  class="spinner-border spinner-border-sm" ></span>
                 <span>Volver</span>
@@ -90,6 +91,7 @@ export default {
       schema,
       message: "",
       categorias: [],
+      activo: true
     }
   },
   methods:{
@@ -101,37 +103,42 @@ export default {
     },
 
     async newProducto() {
-     this.successful = false;
-     this.message = "";
-      var newProducto = {
-        nombre: this.name,
-        pvp: this.precio,
-        especificaciones: this.desc,
-        categoria: this.key,
-        imagen: ""
-      }
-      console.log(newProducto)
-    try{
-     await fetch('https://localhost:5001/api/articulos/crear', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.currentUser.token},
-              body: JSON.stringify(newProducto)
-          }).then(response => response.json()).then(response=> {this.message = response.mensaje})
-          this.$swal("Producto creado correctamente")
-          this.$refs.form.resetForm();
-      }
-      catch (error) {
-          this.loading = false;
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          this.$swal("Error al crear el producto, prueba de nuevo")
-
-      }
+      if(this.activo){
+        this.successful = false;
+        this.message = "";
+        this.activo = false;
+          var newProducto = {
+            nombre: this.name,
+            pvp: this.precio,
+            especificaciones: this.desc,
+            categoria: this.key,
+            imagen: ""
+          }
+          console.log(newProducto)
+        try{
+        await fetch('https://localhost:5001/api/articulos/crear', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json'},
+                  body: JSON.stringify(newProducto)
+              })
+              this.$swal("Producto creado correctamente")
+              this.$refs.form.resetForm();
+              //console.log(this.error)
+          }
+          catch (error) {
+              this.loading = false;
+              this.message =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+              this.$swal("Error al crear, problemas con la base de datos")
+          }
+          finally{
+            this.activo = true;
+          }
+     }
     },
     async volver(){
         this.$router.push('/productos');
