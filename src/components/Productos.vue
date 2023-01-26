@@ -80,6 +80,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: "ProductosComponent",
@@ -95,18 +96,18 @@ export default {
   methods:{
     async getData() {
       //console.log("Pillando data")
-         fetch('https://localhost:5001/api/articulos/page', {
+         fetch(`${API_URL}articulos/page`, {
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
     async getPage(page) {
       //console.log(page)
-        fetch('https://localhost:5001/api/articulos/page?' + new URLSearchParams({
+        fetch(`${API_URL}articulos/page?` + new URLSearchParams({
             page: page,
            })).then(response => response.json()).then(response=> {this.listItems = response})
     },
     async buscar() {
       //console.log(this.name)
-        fetch("http://localhost:3000/productos?" + new URLSearchParams({
+        fetch(`${API_URL}productos?` + new URLSearchParams({
             nombre: this.name,
            }) , {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
@@ -116,7 +117,7 @@ export default {
         this.$router.push('/detallesProducto/' + productoId);
     },
     async remove(productoId,index) {
-         fetch('http://localhost:3000/productos/' + productoId, {
+         fetch(`${API_URL}productos/` + productoId, {
               method: 'DELETE',
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           })

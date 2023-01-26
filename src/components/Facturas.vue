@@ -60,6 +60,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
+import API_URL from '../main';
 
 export default {
   name: "FacturasComponent",
@@ -74,7 +75,7 @@ export default {
   },
   methods:{
     async getData() {
-         fetch('http://localhost:3000/productos', {
+         fetch(`${API_URL}productos`, {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
@@ -88,7 +89,7 @@ export default {
         this.$router.push('/detallesFactura/' + facturaId);
     },
     async remove(pedidoId,index) {
-         fetch('http://localhost:3000/productos/' + pedidoId, {
+         fetch(`${API_URL}productos/` + pedidoId, {
               method: 'DELETE',
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           })
