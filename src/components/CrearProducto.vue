@@ -23,7 +23,15 @@
             <Field v-model="desc" name="desc" type="text" class="form-control" />
             <ErrorMessage name="desc" class="error-feedback" />
           </div>
-
+          <div class="select">
+                <label for="cat">Categoria</label>
+                <select v-model="key" id="select" class="form-control" required >
+                <option v-for="(almacen) in categorias.results" 
+                :value="almacen.categoria" :key="almacen.categoria">
+                {{almacen.categoria}}
+                </option>
+                </select>
+              </div>
           <div class="form-group">
             <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
 
@@ -81,26 +89,36 @@ export default {
       id:"",
       schema,
       message: "",
+      categorias: [],
     }
   },
   methods:{
+      async getData() {
+      //console.log(this.$route.params.id)
+
+         fetch('https://localhost:5001/api/articulos/categorias')
+         .then(response => response.json()).then(response=> {this.categorias = response;console.log(this.categorias)})
+    },
+
     async newProducto() {
      this.successful = false;
      this.message = "";
       var newProducto = {
         nombre: this.name,
-        precio: this.precio,
-        descripcion: this.desc
+        pvp: this.precio,
+        especificaciones: this.desc,
+        categoria: this.key,
+        imagen: ""
       }
       console.log(newProducto)
     try{
-     await fetch('http://localhost:3000/productos', {
+     await fetch('https://localhost:5001/api/articulos/crear', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + this.currentUser.token},
               body: JSON.stringify(newProducto)
           }).then(response => response.json()).then(response=> {this.message = response.mensaje})
-          this.$swal(this.message)
+          this.$swal("Producto creado correctamente")
           this.$refs.form.resetForm();
       }
       catch (error) {
@@ -111,7 +129,7 @@ export default {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          this.$swal(this.message)
+          this.$swal("Error al crear el producto, prueba de nuevo")
 
       }
     },
@@ -133,6 +151,7 @@ export default {
     if (!this.currentUser) {
           this.$router.push('/login');
         }
+    this.getData()
  }
       
 };
@@ -164,5 +183,10 @@ label {
 
 .error-feedback {
   color: red;
+}
+
+.select {
+  margin-top: 10px;
+  max-width: 150px !important;
 }
 </style>
