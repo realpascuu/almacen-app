@@ -61,7 +61,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
-import API_URL from '../main';
+import {API_URL} from '../main';
 
 export default {
   name: 'DetallesMovimientoComponent',
