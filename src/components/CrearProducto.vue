@@ -65,7 +65,7 @@ import {Form,Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 
 import { useAuthStore } from '../stores/authStore.js'
-import API_URL from '../main';
+import {API_URL} from '../main';
 
 export default {
   name: 'CrearProductoComponent',

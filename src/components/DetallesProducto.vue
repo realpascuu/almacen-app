@@ -41,7 +41,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
-import API_URL from '../main';
+import {API_URL} from '../main';
 
 export default {
   name: 'DetallesProductoComponent',
@@ -61,7 +61,7 @@ export default {
     async getData() {
       //console.log(this.$route.params.id)
 
-         fetch(`${API_URL}api/articulos/` + this.$route.params.id).then(response => response.json()).then(response=> {this.nombre = response.nombre;
+         fetch(`${API_URL}articulos/` + this.$route.params.id).then(response => response.json()).then(response=> {this.nombre = response.nombre;
           this.especificaciones=response.especificaciones;this.pvp=response.pvp;this.cod=response.cod})
     },
      async volver(){

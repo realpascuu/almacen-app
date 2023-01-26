@@ -27,7 +27,7 @@
 
  <div style="width: 100%; display: table;">
         <div>
-                <div style="padding:10px" v-for="producto,index in listItems.results" :key="producto.cod">
+                <div style="padding:10px" v-for="producto in listItems.results" :key="producto.cod">
                   <div class="card card-container" >
                     <div class="container">
                       <span style="font-size:18px;font-weight:bold">Producto: </span>
@@ -45,7 +45,7 @@
                         <span>Ver detalles</span>
                       </v-btn>
 
-                      <v-btn :loading="loading" class="ma-1" color="error" plain  @click="remove(producto.cod,index)" rounded >
+                      <v-btn :loading="loading" class="ma-1" color="error" plain  @click="remove(producto.cod)" rounded >
                       Delete
                     </v-btn>
                   </div>
@@ -56,7 +56,7 @@
   </div>
 
   <div style="padding:20px">
-   <v-btn elevation="6" rounded style="margin-right:10px" v-if="listItems.previousPage != -1" @click="getPage(listItems.previousPage)">      
+   <v-btn elevation="6" rounded style="margin-right:10px" v-if="listItems.previousPage != -1" @click="getPage(listItems.previousPage, name)">      
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
@@ -64,7 +64,7 @@
             <span>Página anterior</span>
           </v-btn>
            
-           <v-btn elevation="6" rounded v-if="listItems.nextPage != -1" @click="getPage(listItems.nextPage)" >      
+           <v-btn elevation="6" rounded v-if="listItems.nextPage != -1" @click="getPage(listItems.nextPage, name)" >      
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
@@ -80,7 +80,7 @@
 <script>
 
 import { useAuthStore } from '../stores/authStore.js'
-import API_URL from '../main';
+import {API_URL} from '../main';
 
 export default {
   name: "ProductosComponent",
@@ -99,29 +99,28 @@ export default {
          fetch(`${API_URL}articulos/page`, {
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
-    async getPage(page) {
+    async getPage(page, nombre = null) {
       //console.log(page)
-        fetch(`${API_URL}articulos/page?` + new URLSearchParams({
-            page: page,
-           })).then(response => response.json()).then(response=> {this.listItems = response})
+      const queryParams = (nombre) ? { page: page, nombre: nombre } : { page: page };  
+      fetch(`${API_URL}articulos/page?` + new URLSearchParams(queryParams))
+        .then(response => response.json())
+        .then(response=> {this.listItems = response})
     },
-    async buscar() {
+    async buscar(nombre) {
       //console.log(this.name)
-        fetch(`${API_URL}productos?` + new URLSearchParams({
-            nombre: this.name,
-           }) , {
+      const queryParams = (nombre) ? { nombre: nombre } : { };  
+        fetch(`${API_URL}articulos/page?` + new URLSearchParams(queryParams) , {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           }).then(response => response.json()).then(response=> {this.listItems = response})
     },
       async verDetalles(productoId) {
         this.$router.push('/detallesProducto/' + productoId);
     },
-    async remove(productoId,index) {
-         fetch(`${API_URL}productos/` + productoId, {
-              method: 'DELETE',
-          })
-         this.listItems.results.splice(index, 1); 
-         this.$swal('Producto eliminado correctamente')
+    async remove(productoId) {
+      fetch(`${API_URL}articulos/` + productoId, {
+          method: 'DELETE',
+      })
+      await this.buscar('');
     },
     async crearProducto(){
          this.$router.push('/crearProducto');

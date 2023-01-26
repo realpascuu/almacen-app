@@ -42,6 +42,7 @@
 import {  Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { useAuthStore } from '../stores/authStore.js'
+import { AuthService } from '../services/auth.service';
 
 
 export default {
@@ -52,7 +53,7 @@ export default {
   },
   setup() {
     const store = useAuthStore()
-    return {store}
+    return { store }
   },
   data() {
     const schema = yup.object().shape({
@@ -88,8 +89,14 @@ export default {
       }
       //console.log(user)
       try {
-        await this.store.login(user)
-        this.$router.push("/productos");
+        let authService = new AuthService();
+        let response = await authService.login(user);
+        this.loading = false;
+        if(response == true) {
+          this.$router.push("/productos");
+        } else {
+          this.message = response;
+        }
       }
       catch (error) {
           this.loading = false;

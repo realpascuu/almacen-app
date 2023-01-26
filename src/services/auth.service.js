@@ -1,17 +1,22 @@
 import axios from 'axios';
-import API_URL from '../main';
+import { API_URL } from '../main';
 
-class AuthService {
-  login(user) {
-    return axios
+export class AuthService {
+  async login(user) {
+    return await axios
       .post(API_URL + 'auth/login', {
-        login: user.login,
+        email: user.login,
         password: user.password
       })
       .then(response => {
           localStorage.setItem('user', JSON.stringify(response.data));
-        return response.data;
-      });
+        return true;
+      })
+      .catch(error => {
+        console.log(error);
+        return error?.response?.data;
+      })
+      ;
   }
 
   logout() {
@@ -28,7 +33,7 @@ class AuthService {
   }
 
   editaprod(producto) {
-    return axios.put(API_URL + 'productos/' + producto.id, {
+    return axios.put(API_URL + 'articulos/' + producto.id, {
       nombre: producto.username,
       precio: producto.email,
       descripcion: producto.password,
