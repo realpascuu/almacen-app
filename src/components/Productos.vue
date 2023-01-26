@@ -116,11 +116,10 @@ export default {
         this.$router.push('/detallesProducto/' + productoId);
     },
     async remove(productoId,index) {
-         fetch('http://localhost:3000/productos/' + productoId, {
+         fetch('https://localhost:5001/api/articulos/' + productoId, {
               method: 'DELETE',
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
           })
-         this.listItems.productos.splice(index, 1); 
+         this.listItems.results.splice(index, 1); 
          this.$swal('Producto eliminado correctamente')
     },
     async crearProducto(){

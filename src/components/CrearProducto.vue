@@ -31,7 +31,7 @@
                 {{almacen.categoria}}
                 </option>
                 </select>
-              </div>
+          </div>
           <div class="form-group">
             <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
 
