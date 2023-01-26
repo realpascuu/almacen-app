@@ -27,28 +27,33 @@
 
  <div style="width: 100%; display: table;">
         <div>
-                <div style="padding:10px" v-for="producto in listItems.results" :key="producto.cod">
-                  <div class="card card-container" >
-                    <div class="container">
-                      <span style="font-size:18px;font-weight:bold">Producto: </span>
-                      <span style="font-size:18px">{{producto.nombre}} </span>
-                      <br>
-                      <span style="font-size:18px;font-weight:bold">Precio: </span>
-                      <span style="font-size:18px"> {{producto.pvp}} € </span>
-                      <br>
-                    <div align="right">
-                      <v-btn rounded x-small @click="verDetalles(producto.cod)">      
-                        <span
-                          v-show="loading"
-                          class="spinner-border spinner-border-sm"
-                        ></span>
-                        <span>Ver detalles</span>
-                      </v-btn>
+          <div style="padding:10px" v-for="producto in listItems.results" :key="producto.cod">
+            <div class="card card-container" >
+              <div class="d-flex">
+                <div class="h- d-flex align-items-center" v-if="producto.imagen !== null && producto.imagen !== '' && producto.imagen.startsWith('data')">
+                  <img :src="producto.imagen" width="70">
+                </div>
+              <div class="container">
+                <span style="font-size:18px;font-weight:bold">Producto: </span>
+                <span style="font-size:18px">{{producto.nombre}} </span>
+                <br>
+                <span style="font-size:18px;font-weight:bold">Precio: </span>
+                <span style="font-size:18px"> {{producto.pvp}} € </span>
+                <br>
+                <div align="right">
+                <v-btn rounded x-small @click="verDetalles(producto.cod)">      
+                  <span
+                    v-show="loading"
+                    class="spinner-border spinner-border-sm"
+                  ></span>
+                  <span>Ver detalles</span>
+                </v-btn>
 
-                      <v-btn :loading="loading" class="ma-1" color="error" plain  @click="remove(producto.cod)" rounded >
-                      Delete
-                    </v-btn>
-                  </div>
+                <v-btn :loading="loading" class="ma-1" color="error" plain  @click="remove(producto.cod)" rounded >
+                Delete
+              </v-btn>
+            </div>
+          </div>
           </div>
       </div>
     </div>
