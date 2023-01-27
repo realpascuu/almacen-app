@@ -1,15 +1,23 @@
 <template>
 <div id="app">
  <div style="width: 100%;padding:20px">
- <h4> Buscar movimientos: </h4>
+    <h4> Buscar movimientos: </h4>
+    <div class="d-flex align-items-center" style="justify-content: space-between">
       <div class="select">
         <select v-model="key" id="select" class="form-control" required  @change="buscar()">
-        <option v-for="(almacen) in almacenes" 
-        :value="almacen.id" :key="almacen.id">
-        Almacen {{almacen.id}}
-        </option>
+          <option v-for="(almacen) in almacenes" :value="almacen.id" :key="almacen.id">
+            Almacen {{ almacen.id }}
+          </option>
         </select>
       </div>
+      <v-btn style="float:right" elevation="6" rounded @click="goToCrearMovimiento" >      
+        <span
+          v-show="loading"
+          class="spinner-border spinner-border-sm"
+        ></span>
+        <span >Crear Movimiento</span>
+      </v-btn>
+    </div>
 
         <div v-if="listItems?.results?.length > 0">
                 <div style="padding:10px" v-for="producto in listItems?.results" :key="producto.id">
@@ -96,6 +104,9 @@ export default {
           }
         })
     },
+    goToCrearMovimiento() {
+      this.$router.push('/crearMovimiento');
+    },  
     async getPage(page) {
         let params = (this.key !== null) ? `?almacen=${this.key}` : '';
         fetch('${API_URL}movimientos/page?page=' + page + params, {
