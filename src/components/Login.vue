@@ -42,7 +42,7 @@
 import {  Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { useAuthStore } from '../stores/authStore.js'
-import { AuthService } from '../services/auth.service';
+//import { AuthService } from '../services/auth.service';
 
 
 export default {
@@ -89,8 +89,9 @@ export default {
       }
       //console.log(user)
       try {
-        let authService = new AuthService();
-        let response = await authService.login(user);
+        //let authService = new AuthService();
+        //let response = await authService.login(user);
+        let response = await this.store.login(user);
         this.loading = false;
         if(response == true) {
           this.$router.push("/productos");

@@ -6,7 +6,7 @@
         <select v-model="key" id="select" class="form-control" required  @change="buscar()">
         <option v-for="(almacen) in almacenes" 
         :value="almacen.id" :key="almacen.id">
-         {{almacen.nombre}}
+        Almacen {{almacen.id}}
         </option>
         </select>
       </div>
@@ -19,10 +19,10 @@
                       <span style="font-size:18px">{{producto.id}} </span>
                       <br>
                       <span style="font-size:18px;font-weight:bold"> Almacén Entrada: </span>
-                      <span style="font-size:18px">{{producto.almacen_entrada}} </span>
+                      <span style="font-size:18px">Almacen {{producto.almacen_entrada}} </span>
                       <br> 
                       <span style="font-size:18px;font-weight:bold"> Almacén Salida: </span>
-                      <span style="font-size:18px">{{producto.almacen_salida}} </span>
+                      <span style="font-size:18px">Almacen {{producto.almacen_salida}} </span>
                       <br>
                     <div align="right">
                       <v-btn rounded x-small @click="verDetalles(producto.id)">      
@@ -149,16 +149,16 @@ export default {
   },
  
   mounted() {
-    /**
+    
     if (!this.currentUser) {
           this.$router.push('/login');
         }
       else{
           this.getData()
+          this.getAlmacenes();
       }
-      */
-     this.getData();
-     this.getAlmacenes();
+      
+    
  }
       
 };
