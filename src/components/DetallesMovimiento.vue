@@ -11,14 +11,14 @@
                      <span style="font-size:18px">{{pedido.id}} </span>
                      <br>
                      <span class="titulos"> Almacén de entrada: </span>
-                     <span style="font-size:18px">{{pedido.name}} </span>
+                     <span style="font-size:18px">{{pedido.almacen_entrada}} </span>
                 </div>
                 <div class="column" align="right">
                     <span class="titulos"> Almacén de entrada: </span>
-                    <span style="font-size:18px">{{pedido.name}} </span>
+                    <span style="font-size:18px">{{pedido.almacen_entrada}} </span>
                     <br>
                     <span class="titulos"> Almacén de salida: </span>
-                    <span style="font-size:18px">{{pedido.name}} </span>
+                    <span style="font-size:18px">{{pedido.almacen_salida}} </span>
                 </div>
              </div>
 
@@ -78,7 +78,7 @@ export default {
 
          fetch(`${API_URL}productos/` + this.$route.params.id, {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.pedido = response.producto})
+          }).then(response => response.json()).then(response=> {this.pedido = response.results})
     },
      async volver(){
         this.$router.push('/movimientos');
