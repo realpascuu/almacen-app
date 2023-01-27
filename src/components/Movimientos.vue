@@ -51,21 +51,20 @@
   </div>
 
   <div style="padding:20px">
-   <v-btn elevation="6" rounded style="margin-right:10px" v-if="listItems.previousPage" @click="getPage(listItems.previousPage)">      
-            <span
-              v-show="loading"
-              class="spinner-border spinner-border-sm"
-            ></span>
-            <span>Página anterior</span>
-          </v-btn>
-           
-           <v-btn elevation="6" rounded v-if="listItems.nextPage" @click="getPage(listItems.nextPage)" >      
-            <span
-              v-show="loading"
-              class="spinner-border spinner-border-sm"
-            ></span>
-            <span >Página siguiente</span>
-          </v-btn>
+    <v-btn elevation="6" rounded style="margin-right:10px" v-if="listItems.previousPage" @click="getPage(listItems.previousPage)">      
+      <span
+        v-show="loading"
+        class="spinner-border spinner-border-sm"
+      ></span>
+      <span>Página anterior</span>
+    </v-btn>       
+    <v-btn elevation="6" rounded v-if="listItems.nextPage" @click="getPage(listItems.nextPage)" >      
+    <span
+      v-show="loading"
+      class="spinner-border spinner-border-sm"
+    ></span>
+    <span >Página siguiente</span>
+  </v-btn>
   </div>
 </div>
 
@@ -102,6 +101,7 @@ export default {
           } else {
             this.listItems = []
           }
+          console.log(this.listItems)
         })
     },
     goToCrearMovimiento() {
@@ -109,7 +109,7 @@ export default {
     },  
     async getPage(page) {
         let params = (this.key !== null) ? `?almacen=${this.key}` : '';
-        fetch('${API_URL}movimientos/page?page=' + page + params, {
+        fetch(`${API_URL}movimientos/page?page=` + page + params, {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
           })
           .then(async (response) => {

@@ -88,13 +88,23 @@ export default {
          )
         .then(async (response) => {
           let items = await response.json();
-          this.almacenes = items;
-          this.key = this.almacenes?.results[0].nombre
+          this.listItems = items;
+          this.key = this.listItems?.results[0].nombre
           this.buscar();
           })
         .catch((error) => console.log(error))
     },
-    
+    async getAlmacenes() {
+      await fetch(`${API_URL}almacenes`)
+        .then(async (response) => {
+          if(response.ok) {
+            let almacenes = await response.json();
+            this.almacenes = almacenes;
+          } else {
+            this.almacenes = []
+          }
+        })
+    },
     async getPage(page) {
       //console.log(page)
         fetch(`${API_URL}almacenes/page?page=` + page
@@ -102,8 +112,8 @@ export default {
         )
         .then(async (response) => {
           let items = await response.json();
-          this.almacenes = items;
-          this.key = this.almacenes?.results[0].nombre
+          this.listItems = items;
+          this.key = this.listItems?.results[0].nombre
           this.buscar();
           })
         .catch((error) => console.log(error))
@@ -143,20 +153,14 @@ export default {
     }
   
   },
- 
-  mounted() {
-    
+  async mounted() {
     if (!this.currentUser) {
-          this.$router.push('/login');
-        }
-      else{
-          this.getData()
-         
-      }
-      
-     
-   
-     
+      this.$router.push('/login');
+    }
+    else{
+      await this.getAlmacenes()  
+      this.getData()
+    }    
  }
       
 };
