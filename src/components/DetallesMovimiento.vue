@@ -8,41 +8,39 @@
            <div class="row">
                 <div class="column">
                      <span class="titulos"> Id del movimiento: </span>
-                     <span style="font-size:18px">{{pedido.id}} </span>
-                     <br>
-                     <span class="titulos"> Almacén de entrada: </span>
-                     <span style="font-size:18px">{{pedido.almacen_entrada}} </span>
+                     <span style="font-size:18px">{{this.$route.params.id}} </span>
                 </div>
                 <div class="column" align="right">
                     <span class="titulos"> Almacén de entrada: </span>
-                    <span style="font-size:18px">{{pedido.almacen_entrada}} </span>
+                    <span style="font-size:18px">{{almacen_entrada?.nombre}}, </span>
+                    <span style="font-size:18px">{{almacen_entrada?.localidad}} </span>
                     <br>
                     <span class="titulos"> Almacén de salida: </span>
-                    <span style="font-size:18px">{{pedido.almacen_salida}} </span>
+                    <span style="font-size:18px">{{almacen_salida?.nombre}}, </span>
+                    <span style="font-size:18px">{{almacen_salida?.localidad}} </span>
                 </div>
              </div>
-
-           <span class="titulos">Listado de Productos del pedido: </span>
-              <div class="row">
-                <div class="column" align="center">
-                     <span class="titulos"> Producto: </span>
+             <div v-if="linpeds?.length">
+              <span class="titulos">Listado de Productos del pedido: </span>
+                 <div class="row">
+                   <div class="column" align="center">
+                        <span class="titulos"> Producto: </span>
+                   </div>
+                   <div class="column" align="center">
+                       <span class="titulos"> Unidades: </span>
+                   </div>
                 </div>
-                <div class="column" align="center">
-                    <span class="titulos"> Unidades: </span>
-                </div>
-             </div>
-           <div class="interior-card" style="padding:10px" v-for="producto in pedido" :key="producto.id">
-              <div class="row">
-                <div class="column" align="center">
-                     <span style="font-size:18px">{{producto}} </span>
-                </div>
-                <div class="column" align="center">
-                   <span style="font-size:18px">{{producto}} </span>
-                </div>
+              <div class="interior-card" style="padding:10px" v-for="producto, index in linpeds" :key="index">
+                 <div class="row">
+                   <div class="column" align="center">
+                        <span style="font-size:18px">{{producto.nombre}} </span>
+                   </div>
+                   <div class="column" align="center">
+                      <span style="font-size:18px">{{producto.cantidad}} </span>
+                   </div>
+                 </div>
               </div>
-
-           </div>
-
+            </div>
           <div class="form-group" align="center" style="margin-top:10px">
                 <v-btn rounded x-small @click="volver" color="error" style="margin-top:10px">      
                       <span v-show="loading"  class="spinner-border spinner-border-sm"  ></span>
@@ -68,17 +66,34 @@ export default {
   data () {
  
     return {
-      pedido: [],
+      almacen_entrada: null,
+      almacen_salida: null,
+      linpeds: []
     }
   },
   methods:{
 
     async getData() {
       //console.log(this.$route.params.id)
-
-         fetch(`${API_URL}productos/` + this.$route.params.id, {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.pedido = response.results})
+        fetch(`${API_URL}movimientos/` + this.$route.params.id, {
+            headers: {Authorization: 'Bearer ' + this.currentUser.token}
+        })
+        .then(async (response) => {
+          if(response.ok) {
+            let item = await response.json()
+            this.almacen_entrada = item?.almacen_entrada;
+            this.almacen_salida = item?.almacen_salida;
+            this.linpeds = item?.articulosmovimiento;
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Ha ocurrido un error. Volviendo a movimientos...',
+              timer: 2000,
+              showConfirmButton: false
+            })
+            .then(() => this.volver());
+          }
+        })
     },
      async volver(){
         this.$router.push('/movimientos');

@@ -4,15 +4,15 @@
  <h4> Buscar movimientos: </h4>
       <div class="select">
         <select v-model="key" id="select" class="form-control" required  @change="buscar()">
-        <option v-for="(almacen) in almacenes.results" 
+        <option v-for="(almacen) in almacenes" 
         :value="almacen.id" :key="almacen.id">
-         {{almacen.id}}
+         {{almacen.nombre}}
         </option>
         </select>
       </div>
 
-        <div>
-                <div style="padding:10px" v-for="producto in almacenes.results" :key="producto.id">
+        <div v-if="listItems?.results?.length > 0">
+                <div style="padding:10px" v-for="producto in listItems?.results" :key="producto.id">
                   <div class="card card-container" >
                     <div class="container">
                       <span style="font-size:18px;font-weight:bold"> Id: </span>
@@ -37,6 +37,9 @@
       </div>
     </div>
     </div>
+    <div v-if="!listItems?.results?.length" class="h-50 d-flex align-items-center justify-content-center">
+        No hay datos disponibles
+      </div>
   </div>
 
   <div style="padding:20px">
@@ -75,25 +78,63 @@ export default {
       listItems: [],
       page:"",
       name:"",
-      
+      key: -1
     }
   },
   methods:{
     async getData() {
-         await fetch(`${API_URL}movimientos/page`
-         //, { headers: {Authorization: 'Bearer ' + this.currentUser.token}}
-          ).then(response => response.json()).then(
-          response=> {this.almacenes = response, this.key = this.almacenes.results[0]
-          })
+      let params = (this.key !== null) ? `?almacen=${this.key}` : '';
+      await fetch(`${API_URL}movimientos/page${params}`
+      //, { headers: {Authorization: 'Bearer ' + this.currentUser.token}}
+        )
+        .then(async (response) => {
+          if(response.ok) {
+            let mov = await response.json();
+            this.listItems = mov;
+          } else {
+            this.listItems = []
+          }
+        })
     },
     async getPage(page) {
-        fetch('http://' + page
-        , {
+        let params = (this.key !== null) ? `?almacen=${this.key}` : '';
+        fetch('${API_URL}movimientos/page?page=' + page + params, {
               headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.listItems = response})
+          })
+          .then(async (response) => {
+          if(response.ok) {
+            let mov = await response.json();
+            this.listItems = mov;
+          } else {
+            this.listItems = []
+          }
+        })
     },
       async verDetalles(movimientoId) {
         this.$router.push('/detallesMovimiento/' + movimientoId);
+    },
+    async buscar() {
+      await fetch(`${API_URL}movimientos/page?almacen=` + this.key)
+      .then(async (response) => {
+          if(response.ok) {
+            let mov = await response.json();
+            this.listItems = mov;
+          } else {
+            this.listItems = []
+          }
+        })
+    },
+    async getAlmacenes() {
+      await fetch(`${API_URL}almacenes`)
+        .then(async (response) => {
+          if(response.ok) {
+            let almacenes = await response.json();
+            this.almacenes = almacenes;
+            this.key = (this.almacenes?.results?.length) ? this.almacenes.results[0] : null;
+          } else {
+            this.almacenes = []
+          }
+        })
     }
     
   },
@@ -116,7 +157,8 @@ export default {
           this.getData()
       }
       */
-     this.getData()
+     this.getData();
+     this.getAlmacenes();
  }
       
 };
