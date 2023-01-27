@@ -11,29 +11,32 @@
         </option>
         </select>
       </div>
-        <div>
-                <div style="padding:10px" v-for="producto in listItems.results" :key="producto.id">
-                  <div class="card card-container" >
-                    <div class="container">
-                      <span style="font-size:18px;font-weight:bold">Articulo: </span>
-                      <span style="font-size:18px">{{producto.articulo}} </span>
-                      <br>
-                      <span style="font-size:18px;font-weight:bold">Cantidad: </span>
-                      <span style="font-size:18px"> {{producto.cantidad}} </span>
-                      <br>
-                    <div align="right">
-                      <v-btn rounded x-small @click="verDetalles(producto.id)">      
-                        <span
-                          v-show="loading"
-                          class="spinner-border spinner-border-sm"
-                        ></span>
-                        <span>Ver detalles</span>
-                      </v-btn>
-                  </div>
+        <div v-if="listItems?.results?.length > 0">
+          <div style="padding:10px" v-for="producto in listItems.results" :key="producto.id">
+            <div class="card card-container" >
+              <div class="container">
+                <span style="font-size:18px;font-weight:bold">Articulo: </span>
+                <span style="font-size:18px">{{producto.articulo}} </span>
+                <br>
+                <span style="font-size:18px;font-weight:bold">Cantidad: </span>
+                <span style="font-size:18px"> {{producto.cantidad}} </span>
+                <br>
+                <div align="right">
+                  <v-btn rounded x-small @click="verDetalles(producto.id)">      
+                    <span
+                      v-show="loading"
+                      class="spinner-border spinner-border-sm"
+                    ></span>
+                    <span>Ver detalles</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
           </div>
       </div>
-    </div>
-    </div>
+      <div v-if="!listItems?.results?.length" class="h-50 d-flex align-items-center justify-content-center">
+        No hay datos disponibles
+      </div>
   </div>
 
   <div style="padding:20px">
@@ -71,6 +74,7 @@ export default {
       almacenes: [],
       listItems: [],
       page:"",
+      key: "",
       name:"",
       producto: [],
       almacen: "",
@@ -81,28 +85,49 @@ export default {
       //this.key=this.listItems.Almacenseleccionados o algo asi
        await  fetch(`${API_URL}almacenes/page`
          //, { headers: {Authorization: 'Bearer ' + this.currentUser.token}}
-         ).then(response => response.json()).then(
-          response=> {this.almacenes = response, this.key = this.almacenes.results[0].nombre
-          this.buscar()
+         )
+        .then(async (response) => {
+          let items = await response.json();
+          this.almacenes = items;
+          this.key = this.almacenes?.results[0].nombre
+          this.buscar();
           })
-        
-         
+        .catch((error) => console.log(error))
     },
     
     async getPage(page) {
       //console.log(page)
-        fetch('http://' + page
+        fetch(`${API_URL}almacenes/page?page=` + page
         //, {headers: {Authorization: 'Bearer ' + this.currentUser.token}}
-        ).then(response => response.json()).then(response=> {this.listItems = response})
+        )
+        .then(async (response) => {
+          let items = await response.json();
+          this.almacenes = items;
+          this.key = this.almacenes?.results[0].nombre
+          this.buscar();
+          })
+        .catch((error) => console.log(error))
         
     },
     async buscar() {
         //console.log(this.key);
-        fetch(`${API_URL}almacenes/`+this.key+`?` + new URLSearchParams({
+        fetch(`${API_URL}almacenes/`+ this.key + `?` + new URLSearchParams({
             nombre: this.key,
            }) 
            //, {headers: {Authorization: 'Bearer ' + this.currentUser.token}}
-          ).then(response => response.json()).then(response=> {this.listItems = response})
+          )
+          .then(async (response) => {
+            console.log(response.ok);
+            if(!response.ok) {
+              console.log('aaaa')
+              this.listItems = [];
+            } else {
+              let items = await response.json()
+              console.log(items.results)
+              this.listItems = items;
+            }
+          })
+        .catch((error) => console.log(error))
     },
     async verDetalles(productoId) {
         this.$router.push('/detallesProducto/' + productoId);
