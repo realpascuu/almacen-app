@@ -32,6 +32,9 @@
                 </option>
                 </select>
           </div>
+          <div class="my-2">
+            <input type="file" accept="image/*" @input="loadImage($event)">
+          </div>
           <div class="form-group">
             <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
 
@@ -79,6 +82,7 @@ export default {
       name: yup.string().required("Campo nombre requerido!"),
       desc: yup.string().required("Campo descripción requerido!"),
       precio: yup.string().required("Campo precio requerido!"),
+      image: null
     });
 
     return {
@@ -89,6 +93,7 @@ export default {
       desc:"",
       precio:"",
       id:"",
+      image: null,
       schema,
       message: "",
       categorias: [],
@@ -108,22 +113,31 @@ export default {
         this.successful = false;
         this.message = "";
         this.activo = false;
+        console.log(this.image)
           var newProducto = {
             nombre: this.name,
             pvp: this.precio,
             especificaciones: this.desc,
             categoria: this.key,
-            imagen: ""
+            imagen: this.image
           }
-          console.log(newProducto)
         try{
-        await fetch(`${API_URL}articulos/crear`, {
+        await fetch(`${API_URL}articulos`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json'},
                   body: JSON.stringify(newProducto)
               })
-              this.$swal("Producto creado correctamente")
-              this.$refs.form.resetForm();
+              .then(() => {
+                this.$swal("Producto creado correctamente")
+                this.$refs.form.resetForm();
+              })
+              .catch(() => {
+                this.$swal({
+                  icon: 'error',
+                  title: "Producto creado correctamente"
+                })
+              })
+              
               //console.log(this.error)
           }
           catch (error) {
@@ -140,6 +154,15 @@ export default {
             this.activo = true;
           }
      }
+    },
+    loadImage(event) {
+      console.log(event)
+      var reader = new FileReader()
+      reader.onloadend = () => {
+        this.image = reader.result;
+        console.log(this.image);
+      };
+      reader.readAsDataURL(event.target.files[0])
     },
     async volver(){
         this.$router.push('/productos');

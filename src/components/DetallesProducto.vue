@@ -14,10 +14,10 @@
            <span class="titulos">Descripción: </span>
            <span style="font-size:18px"> {{especificaciones}} </span>
            <span class="titulos" style="margin-top:20px"> *Agregar cantidad a almacenes: </span>
-           <input type="Number" v-model.number="cantidad" class="form-control" style="width:150px"/>
+           <input type="Number" v-model.number="cantidad" min="0" class="form-control" style="width:150px"/>
           <div class="form-group">
             <div class="form-group" style="padding-bot:10px;padding-top:20px;text-align:center">
-               <v-btn rounded x-small @click="comprar(cantidad)" color="primary">      
+               <v-btn rounded x-small @click="comprar(cantidad)" color="primary" :disabled="cantidad <= 0">      
                       <span v-show="loading"  class="spinner-border spinner-border-sm"  ></span>
                     <span>Agregar Cantidad</span>
             </v-btn>
@@ -53,16 +53,20 @@ export default {
       especificaciones: "",
       pvp:"",
       categoria:"",
-      cantidad:"0"
+      cantidad: 0
     }
   },
   methods:{
-
     async getData() {
       //console.log(this.$route.params.id)
 
-         fetch(`${API_URL}articulos/` + this.$route.params.id).then(response => response.json()).then(response=> {this.nombre = response.nombre;
-          this.especificaciones=response.especificaciones;this.pvp=response.pvp;this.cod=response.cod})
+        fetch(`${API_URL}articulos/` + this.$route.params.id,).then(response => response.json())
+        .then(response=> {
+          this.nombre = response.nombre;
+          this.especificaciones = response.especificaciones;
+          this.pvp = response.pvp;
+          this.cod = response.cod;
+        })
     },
      async volver(){
         this.$router.push('/productos');
@@ -71,9 +75,31 @@ export default {
         console.log(cantidad)
         if(this.cantidad <= 0){
            this.$swal('¡La cantidad tiene que ser un número positivo!')
+        } else {
+          let ped = {
+            "venta": false,
+            lineas: [
+              {
+                cantidad: this.cantidad,
+                codArt: this.cod
+              }
+            ]
+          };
+          fetch(`${API_URL}pedidos`, 
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(ped)
+          }
+          ).then(() => this.$swal({
+            icon: 'success',
+            title: 'Pedido realizado'
+          }))
+          .catch(() => this.$swal({
+            icon: 'error',
+            title: 'Error al realizar el pedido'
+          }))
         }
-        else
-        this.$swal('Cantidad agregada a los almacenes correctamente')
     },
   },
   setup() {
@@ -85,7 +111,6 @@ export default {
       return this.store.user;
     }
   },
- 
   mounted() {
     if (!this.currentUser) {
           this.$router.push('/login');

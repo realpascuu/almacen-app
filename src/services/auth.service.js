@@ -13,7 +13,6 @@ export class AuthService {
         return true;
       })
       .catch(error => {
-        console.log(error);
         return error?.response?.data;
       })
       ;
@@ -25,13 +24,8 @@ export class AuthService {
 
   async register(user) {
     return await axios.post(API_URL + 'users', { ...user })
-    .then(() => {
-      
-      return true;
-    })
-    .catch(() => {
-      return false;
-    });
+    .then(() => true)
+    .catch(() => false);
   }
 
   editaprod(producto) {
