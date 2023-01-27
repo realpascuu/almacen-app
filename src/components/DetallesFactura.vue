@@ -8,17 +8,17 @@
            <div class="row">
                 <div class="column-mitad">
                      <span class="titulos"> Id de factura: </span>
-                     <span style="font-size:18px">{{pedido.id}} </span>
+                     <span style="font-size:18px">{{pedido.numped}} </span>
                      <br>
                      <span class="titulos"> Fecha de pedido: </span>
-                     <span style="font-size:18px">{{pedido.name}} </span>
+                     <span style="font-size:18px">{{pedido.fecha_pedido}} </span>
                      <br>
                      <span class="titulos"> Fecha de factura: </span>
-                     <span style="font-size:18px">{{pedido.name}} </span>
+                     <span style="font-size:18px">{{pedido.fecha_factura}} </span>
                 </div>
                 <div class="column-mitad" align="right">
                     <span class="titulos"> Operación: </span>
-                    <span style="font-size:18px">{{pedido.name}} </span>
+                    <span style="font-size:18px">{{pedido.venta ? 'Venta' : 'Compra'}} </span>
                 </div>
              </div>
 
@@ -34,23 +34,23 @@
                     <span class="titulos"> Precio: </span>
                 </div>
              </div>
-           <div class="interior-card" style="padding:10px" v-for="producto in pedido" :key="producto.id">
+           <div class="interior-card" style="padding:10px" v-for="linped, index in linpeds" :key="index">
               <div class="row">
                 <div class="column" align="center">
-                     <span style="font-size:18px">{{producto}} </span>
+                     <span style="font-size:18px">{{linped.nombre}} </span>
                 </div>
                 <div class="column" align="center">
-                   <span style="font-size:18px">{{producto}} </span>
+                   <span style="font-size:18px">{{linped.cantidad}} </span>
                 </div>
                 <div class="column" align="center">
-                   <span style="font-size:18px">{{producto}} </span>
+                   <span style="font-size:18px">{{linped.precio}} </span>
                 </div>
               </div>
 
            </div>
            <div align="center">
              <span class="titulos">Precio Total: </span>
-             <span style="font-size:18px"> {{pedido.precio}} </span>
+             <span style="font-size:18px"> {{precio_total}} € </span>
           </div>
 
           <div class="form-group" align="center" style="margin-top:10px">
@@ -79,17 +79,27 @@ export default {
   data () {
  
     return {
-      pedido: [],
+      pedido: {},
+      linpeds: [],
+      precio_total: 0
     }
   },
   methods:{
-
     async getData() {
       //console.log(this.$route.params.id)
-
-         fetch(`${API_URL}productos/` + this.$route.params.id, {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.pedido = response.producto})
+      fetch(`${API_URL}pedidos/` + this.$route.params.id, {
+          headers: {Authorization: 'Bearer ' + this.currentUser.token}
+      })
+      .then(async (response) => {
+        if(response.ok) {
+          var data = await response.json();
+          this.pedido = data.pedido;
+          this.linpeds = data.linpeds;
+          this.precio_total = this.linpeds?.reduce((acc, e) => {
+            return acc + e.cantidad * e.precio;
+          }, 0); 
+        }
+      })
     },
      async volver(){
         this.$router.push('/facturas');
