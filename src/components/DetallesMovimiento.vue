@@ -21,7 +21,7 @@
                 </div>
              </div>
              <div v-if="linpeds?.length">
-              <span class="titulos">Listado de Productos del pedido: </span>
+              <span class="titulos">Listado de Productos del Movimiento: </span>
                  <div class="row">
                    <div class="column" align="center">
                         <span class="titulos"> Producto: </span>
