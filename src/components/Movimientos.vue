@@ -4,25 +4,25 @@
  <h4> Buscar movimientos: </h4>
       <div class="select">
         <select v-model="key" id="select" class="form-control" required  @change="buscar()">
-        <option v-for="(almacen) in listItems.productos" 
-        :value="almacen.name" :key="almacen.name">
-         {{almacen.name}}
+        <option v-for="(almacen) in almacenes.results" 
+        :value="almacen.id" :key="almacen.id">
+         {{almacen.id}}
         </option>
         </select>
       </div>
 
         <div>
-                <div style="padding:10px" v-for="producto in listItems.productos" :key="producto.id">
+                <div style="padding:10px" v-for="producto in almacenes.results" :key="producto.id">
                   <div class="card card-container" >
                     <div class="container">
                       <span style="font-size:18px;font-weight:bold"> Id: </span>
                       <span style="font-size:18px">{{producto.id}} </span>
                       <br>
                       <span style="font-size:18px;font-weight:bold"> Almacén Entrada: </span>
-                      <span style="font-size:18px">{{producto.name}} </span>
+                      <span style="font-size:18px">{{producto.almacen_entrada}} </span>
                       <br> 
                       <span style="font-size:18px;font-weight:bold"> Almacén Salida: </span>
-                      <span style="font-size:18px">{{producto.precio}} </span>
+                      <span style="font-size:18px">{{producto.almacen_salida}} </span>
                       <br>
                     <div align="right">
                       <v-btn rounded x-small @click="verDetalles(producto.id)">      
@@ -71,17 +71,20 @@ export default {
 
   data () {
     return {
+      almacenes: [],
       listItems: [],
       page:"",
       name:"",
-      producto: [],
+      
     }
   },
   methods:{
     async getData() {
-         fetch(`${API_URL}movimientos`, {
-              headers: {Authorization: 'Bearer ' + this.currentUser.token}
-          }).then(response => response.json()).then(response=> {this.listItems = response})
+         await fetch(`${API_URL}movimientos/page`
+         //, { headers: {Authorization: 'Bearer ' + this.currentUser.token}}
+          ).then(response => response.json()).then(
+          response=> {this.almacenes = response, this.key = this.almacenes.results[0]
+          })
     },
     async getPage(page) {
         fetch('http://' + page
