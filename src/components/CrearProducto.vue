@@ -110,10 +110,13 @@ export default {
 
     async newProducto() {
       if(this.activo){
-        this.successful = false;
-        this.message = "";
-        this.activo = false;
-        console.log(this.image)
+        if(this.image!=null && this.key!=null)
+        {
+
+          this.successful = false;
+          this.message = "";
+          this.activo = false;
+          console.log(this.image)
           var newProducto = {
             nombre: this.name,
             pvp: this.precio,
@@ -121,39 +124,43 @@ export default {
             categoria: this.key,
             imagen: this.image
           }
-        try{
-        await fetch(`${API_URL}articulos`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json'},
-                  body: JSON.stringify(newProducto)
+          try{
+            await fetch(`${API_URL}articulos`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json'},
+              body: JSON.stringify(newProducto)
+            })
+            .then(() => {
+              this.$swal("Producto creado correctamente")
+              this.$refs.form.resetForm();
+            })
+            .catch(() => {
+              this.$swal({
+                icon: 'error',
+                title: "Producto creado correctamente"
               })
-              .then(() => {
-                this.$swal("Producto creado correctamente")
-                this.$refs.form.resetForm();
-              })
-              .catch(() => {
-                this.$swal({
-                  icon: 'error',
-                  title: "Producto creado correctamente"
-                })
-              })
-              
-              //console.log(this.error)
+            })
+            
+            //console.log(this.error)
           }
           catch (error) {
-              this.loading = false;
-              this.message =
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                error.message ||
-                error.toString();
-              this.$swal("Error al crear, problemas con la base de datos")
+            this.loading = false;
+            this.message =
+            (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+            error.message ||
+            error.toString();
+            this.$swal("Error al crear, problemas con la base de datos")
           }
           finally{
             this.activo = true;
           }
-     }
+        }else
+        {
+          this.$swal("Error al crear, campos requeridos")
+        }
+        }
     },
     loadImage(event) {
       console.log(event)
@@ -183,7 +190,7 @@ export default {
           this.$router.push('/login');
         }else
         {
-
+          
           this.getData()
         }
  }

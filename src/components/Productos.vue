@@ -27,7 +27,7 @@
 
  <div style="width: 100%; display: table;">
         <div>
-          <div style="padding:10px" v-for="producto in listItems.results" :key="producto.cod">
+          <div style="padding:10px" v-for="producto,index in listItems.results" :key="producto.cod">
             <div class="card card-container" >
               <div class="d-flex">
                 <div class="h- d-flex align-items-center" v-if="producto.imagen !== null && producto.imagen !== '' && producto.imagen.startsWith('data')">
@@ -49,7 +49,7 @@
                   <span>Ver detalles</span>
                 </v-btn>
 
-                <v-btn :loading="loading" class="ma-1" color="error" plain  @click="remove(producto.cod)" rounded >
+                <v-btn :loading="loading" class="ma-1" color="error" plain  @click="remove(producto.cod,index)" rounded >
                 Delete
               </v-btn>
             </div>
@@ -121,11 +121,13 @@ export default {
       async verDetalles(productoId) {
         this.$router.push('/detallesProducto/' + productoId);
     },
-    async remove(productoId) {
+    async remove(productoId,index) {
       fetch(`${API_URL}articulos/` + productoId, {
           method: 'DELETE',
       })
-      await this.buscar('');
+      //await this.buscar('');
+      this.listItems.results.splice(index,1);
+      this.$swal("Producto borrado correctamente");
     },
     async crearProducto(){
          this.$router.push('/crearProducto');
